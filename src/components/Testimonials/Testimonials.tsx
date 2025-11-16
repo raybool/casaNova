@@ -5,26 +5,30 @@ import styles from "./Testimonials.module.scss";
 
 export default function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add(styles.visible);
+            if (cardRef.current) {
+              cardRef.current.classList.add(styles.visible);
+            }
           }
         });
       },
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);
@@ -32,7 +36,7 @@ export default function Testimonials() {
   return (
     <section ref={sectionRef} className={styles.testimonials} id="testimonials">
       <div className={styles.container}>
-        <div className={styles.card}>
+        <div ref={cardRef} className={styles.card}>
           <div className={styles.quote}>
             <svg
               width="48"
@@ -57,7 +61,7 @@ export default function Testimonials() {
           <div className={styles.author}>
             <div className={styles.name}>Александр Миронов</div>
             <div className={styles.role}>
-              Предприниматель, Дубай & Côte d&apos;Azur
+              Предприниматель, Дубай & Côte d'Azur
             </div>
           </div>
           <div className={styles.indicators}>
